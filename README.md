@@ -56,6 +56,63 @@ claude mcp add-json wyze '{
 }'
 ```
 
+## Example
+
+```
+❯ list my wyze devices
+
+You have 13 Wyze devices:
+
+Cameras (6)
+┌──────────────────────┬─────────────┬──────────────────────┐
+│       Nickname       │    Model    │         MAC          │
+├──────────────────────┼─────────────┼──────────────────────┤
+│ Garage Cam           │ WYZEC1-JZ   │ 2CAA8E80A2C6         │
+├──────────────────────┼─────────────┼──────────────────────┤
+│ Backyard Battery Cam │ AN_RSCW     │ AN_RSCW_80482C23EC68 │
+├──────────────────────┼─────────────┼──────────────────────┤
+│ Katsu Cam            │ GW_GC1      │ GW_GC1_D03F27748108  │
+├──────────────────────┼─────────────┼──────────────────────┤
+│ Baby Cam             │ GW_GC1      │ GW_GC1_D03F277487C9  │
+├──────────────────────┼─────────────┼──────────────────────┤
+│ Patio Cam            │ WYZECP1_JEF │ 2CAA8E7148EF         │
+├──────────────────────┼─────────────┼──────────────────────┤
+│ Living Room Cam      │ WYZECP1_JEF │ 2CAA8E6A56FE         │
+└──────────────────────┴─────────────┴──────────────────────┘
+
+Plugs (5)
+┌──────────────────────┬───────┬──────────────┐
+│       Nickname       │ Model │     MAC      │
+├──────────────────────┼───────┼──────────────┤
+│ Landing Area Lamp    │ WLPP1 │ 2CAA8E7FCEBD │
+├──────────────────────┼───────┼──────────────┤
+│ Patio Lights         │ WLPP1 │ 2CAA8E7F9C51 │
+├──────────────────────┼───────┼──────────────┤
+│ Living Room Lamp     │ WLPP1 │ 2CAA8E76FED2 │
+├──────────────────────┼───────┼──────────────┤
+│ Master Bedroom Left  │ WLPP1 │ 2CAA8E76FC7E │
+├──────────────────────┼───────┼──────────────┤
+│ Master Bedroom Right │ WLPP1 │ 2CAA8E76DD43 │
+└──────────────────────┴───────┴──────────────┘
+
+Lights (1)
+┌─────────────┬──────────┬──────────────┐
+│  Nickname   │  Model   │     MAC      │
+├─────────────┼──────────┼──────────────┤
+│ Living Room │ HL_A19C2 │ 80482CAFAB82 │
+└─────────────┴──────────┴──────────────┘
+
+❯ turn off the living room light and turn it back on
+
+wyze_turn_off (device: "Living Room")
+  → Successfully turned off "Living Room" (80482CAFAB82)
+
+wyze_turn_on (device: "Living Room")
+  → Successfully turned on "Living Room" (80482CAFAB82)
+
+Done. Turned off the Living Room light and turned it back on.
+```
+
 ## Available Tools
 
 ### `wyze_list_devices`
