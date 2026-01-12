@@ -2,6 +2,10 @@
 
 An MCP (Model Context Protocol) server for controlling Wyze smart home devices. This server allows AI assistants to list, monitor, and control Wyze devices including cameras, plugs, lights, locks, thermostats, and more.
 
+## Disclaimer
+
+This MCP server was entirely vibecoded using Claude Code. Wyze does not provide official public API documentation, so this implementation is based on reverse-engineered APIs from community projects like [wyze-api](https://github.com/jfarmer08/wyze-api) and [wyze-sdk](https://github.com/shauntarves/wyze-sdk). As a result, some functionality may not work correctly or may break if Wyze changes their internal APIs.
+
 ## Features
 
 - **Device Discovery**: List all Wyze devices with filtering by type
@@ -58,59 +62,71 @@ claude mcp add-json wyze '{
 
 ## Example
 
+Using the Wyze MCP server with [Claude Code](https://docs.anthropic.com/en/docs/claude-code):
+
 ```
 ❯ list my wyze devices
+  ⎿  {
+       "count": 13,
+       "devices": [
+     … +93 lines (ctrl+o to expand)
 
-You have 13 Wyze devices:
+⏺ You have 13 Wyze devices:
 
-Cameras (6)
-┌──────────────────────┬─────────────┬──────────────────────┐
-│       Nickname       │    Model    │         MAC          │
-├──────────────────────┼─────────────┼──────────────────────┤
-│ Garage Cam           │ WYZEC1-JZ   │ 2CAA8E80A2C6         │
-├──────────────────────┼─────────────┼──────────────────────┤
-│ Backyard Battery Cam │ AN_RSCW     │ AN_RSCW_80482C23EC68 │
-├──────────────────────┼─────────────┼──────────────────────┤
-│ Katsu Cam            │ GW_GC1      │ GW_GC1_D03F27748108  │
-├──────────────────────┼─────────────┼──────────────────────┤
-│ Baby Cam             │ GW_GC1      │ GW_GC1_D03F277487C9  │
-├──────────────────────┼─────────────┼──────────────────────┤
-│ Patio Cam            │ WYZECP1_JEF │ 2CAA8E7148EF         │
-├──────────────────────┼─────────────┼──────────────────────┤
-│ Living Room Cam      │ WYZECP1_JEF │ 2CAA8E6A56FE         │
-└──────────────────────┴─────────────┴──────────────────────┘
-
-Plugs (5)
-┌──────────────────────┬───────┬──────────────┐
-│       Nickname       │ Model │     MAC      │
-├──────────────────────┼───────┼──────────────┤
-│ Landing Area Lamp    │ WLPP1 │ 2CAA8E7FCEBD │
-├──────────────────────┼───────┼──────────────┤
-│ Patio Lights         │ WLPP1 │ 2CAA8E7F9C51 │
-├──────────────────────┼───────┼──────────────┤
-│ Living Room Lamp     │ WLPP1 │ 2CAA8E76FED2 │
-├──────────────────────┼───────┼──────────────┤
-│ Master Bedroom Left  │ WLPP1 │ 2CAA8E76FC7E │
-├──────────────────────┼───────┼──────────────┤
-│ Master Bedroom Right │ WLPP1 │ 2CAA8E76DD43 │
-└──────────────────────┴───────┴──────────────┘
-
-Lights (1)
-┌─────────────┬──────────┬──────────────┐
-│  Nickname   │  Model   │     MAC      │
-├─────────────┼──────────┼──────────────┤
-│ Living Room │ HL_A19C2 │ 80482CAFAB82 │
-└─────────────┴──────────┴──────────────┘
+  Cameras (6)
+  ┌──────────────────────┬─────────────┬──────────────────────┐
+  │       Nickname       │    Model    │         MAC          │
+  ├──────────────────────┼─────────────┼──────────────────────┤
+  │ Garage Cam           │ WYZEC1-JZ   │ 2CAA8E80A2C6         │
+  ├──────────────────────┼─────────────┼──────────────────────┤
+  │ Backyard Battery Cam │ AN_RSCW     │ AN_RSCW_80482C23EC68 │
+  ├──────────────────────┼─────────────┼──────────────────────┤
+  │ Katsu Cam            │ GW_GC1      │ GW_GC1_D03F27748108  │
+  ├──────────────────────┼─────────────┼──────────────────────┤
+  │ Baby Cam             │ GW_GC1      │ GW_GC1_D03F277487C9  │
+  ├──────────────────────┼─────────────┼──────────────────────┤
+  │ Patio Cam            │ WYZECP1_JEF │ 2CAA8E7148EF         │
+  ├──────────────────────┼─────────────┼──────────────────────┤
+  │ Living Room Cam      │ WYZECP1_JEF │ 2CAA8E6A56FE         │
+  └──────────────────────┴─────────────┴──────────────────────┘
+  Plugs (5)
+  ┌──────────────────────┬───────┬──────────────┐
+  │       Nickname       │ Model │     MAC      │
+  ├──────────────────────┼───────┼──────────────┤
+  │ Landing Area Lamp    │ WLPP1 │ 2CAA8E7FCEBD │
+  ├──────────────────────┼───────┼──────────────┤
+  │ Patio Lights         │ WLPP1 │ 2CAA8E7F9C51 │
+  ├──────────────────────┼───────┼──────────────┤
+  │ Living Room Lamp     │ WLPP1 │ 2CAA8E76FED2 │
+  ├──────────────────────┼───────┼──────────────┤
+  │ Master Bedroom Left  │ WLPP1 │ 2CAA8E76FC7E │
+  ├──────────────────────┼───────┼──────────────┤
+  │ Master Bedroom Right │ WLPP1 │ 2CAA8E76DD43 │
+  └──────────────────────┴───────┴──────────────┘
+  Lights (1)
+  ┌─────────────┬──────────┬──────────────┐
+  │  Nickname   │  Model   │     MAC      │
+  ├─────────────┼──────────┼──────────────┤
+  │ Living Room │ HL_A19C2 │ 80482CAFAB82 │
+  └─────────────┴──────────┴──────────────┘
+  Other (1)
+  ┌────────────────┬────────┬──────────┐
+  │    Nickname    │  Type  │  Model   │
+  ├────────────────┼────────┼──────────┤
+  │ Bathroom Scale │ Common │ WL_SCLET │
+  └────────────────┴────────┴──────────┘
 
 ❯ turn off the living room light and turn it back on
 
-wyze_turn_off (device: "Living Room")
-  → Successfully turned off "Living Room" (80482CAFAB82)
+⏺ wyze - wyze_turn_off (MCP)(device: "Living Room")
+  ⎿  Successfully turned off "Living Room" (80482CAFAB82)
 
-wyze_turn_on (device: "Living Room")
-  → Successfully turned on "Living Room" (80482CAFAB82)
 
-Done. Turned off the Living Room light and turned it back on.
+⏺ wyze - wyze_turn_on (MCP)(device: "Living Room")
+  ⎿  Successfully turned on "Living Room" (80482CAFAB82)
+
+
+⏺ Done. Turned off the Living Room light and turned it back on.
 ```
 
 ## Available Tools
