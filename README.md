@@ -10,7 +10,7 @@ This MCP server was entirely vibecoded using Claude Code. Wyze does not provide 
 
 - **Device Discovery**: List all Wyze devices with filtering by type
 - **Power Control**: Turn devices on/off (plugs, lights, switches)
-- **Light Control**: Adjust brightness and color temperature
+- **Light Control**: Adjust brightness, color temperature, and RGB color
 - **Lock Control**: Lock and unlock Wyze door locks
 - **Status Monitoring**: Get detailed device status and properties
 - **Custom Actions**: Run device-specific actions (garage door, etc.)
@@ -200,6 +200,31 @@ Set the color temperature of a Wyze light.
 **Example:**
 ```
 Set the living room light to warm white (2700K)
+```
+
+### `wyze_set_color`
+
+Set the RGB color of a Wyze Color Bulb.
+
+**Parameters:**
+- `device` (required): Device MAC address or nickname (must be a color bulb)
+- `color` (required): RGB hex color (e.g., `ff0000` for red, `00ff00` for green)
+
+**Common colors:**
+| Color | Hex Code |
+|-------|----------|
+| Red | `ff0000` |
+| Green | `00ff00` |
+| Blue | `0000ff` |
+| Yellow | `ffff00` |
+| Magenta | `ff00ff` |
+| Cyan | `00ffff` |
+| Orange | `ffa500` |
+| White | `ffffff` |
+
+**Example:**
+```
+Set the living room light to blue
 ```
 
 ### `wyze_lock`
