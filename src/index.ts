@@ -18,6 +18,7 @@ import {
   setDevicePower,
   setDeviceBrightness,
   setDeviceColorTemp,
+  setDeviceColor,
   controlLock,
   getLockInfo,
   runDeviceAction,
@@ -99,6 +100,17 @@ const ColorTempSchema = z
       .min(2700)
       .max(6500)
       .describe("Color temperature in Kelvin (2700=warm, 6500=cool)"),
+  })
+  .strict();
+
+const ColorSchema = z
+  .object({
+    device: z
+      .string()
+      .describe("Device MAC address or nickname (must be a color bulb)"),
+    color: z
+      .string()
+      .describe("RGB hex color (e.g., 'ff0000' for red, '00ff00' for green, '0000ff' for blue)"),
   })
   .strict();
 
@@ -529,6 +541,73 @@ Examples:
           {
             type: "text",
             text: `Successfully set color temperature to ${params.color_temp}K for "${device.nickname}" (${device.mac})`,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [{ type: "text", text: handleApiError(error) }],
+        isError: true,
+      };
+    }
+  }
+);
+
+// Set color (for color bulbs)
+server.registerTool(
+  "wyze_set_color",
+  {
+    title: "Set Light Color",
+    description: `Set the color of a Wyze color bulb.
+
+Color is specified as a 6-character hex RGB value (with or without # prefix).
+
+Common colors:
+- ff0000 = Red
+- 00ff00 = Green
+- 0000ff = Blue
+- ffff00 = Yellow
+- ff00ff = Magenta
+- 00ffff = Cyan
+- ffffff = White
+- ffa500 = Orange
+
+Only works with Wyze Color Bulbs (mesh bulbs).
+
+Examples:
+- wyze_set_color(device="Living Room Light", color="ff0000")  # Red
+- wyze_set_color(device="Bedroom Lamp", color="#00ff00")  # Green`,
+    inputSchema: ColorSchema,
+    annotations: {
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: true,
+    },
+  },
+  async (params) => {
+    try {
+      const device = await findDevice(params.device);
+      if (!device) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: Device "${params.device}" not found. Use wyze_list_devices to see available devices.`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      await setDeviceColor(device.mac, device.product_model, params.color);
+
+      const colorDisplay = params.color.replace(/^#/, "").toUpperCase();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Successfully set color to #${colorDisplay} for "${device.nickname}" (${device.mac})`,
           },
         ],
       };

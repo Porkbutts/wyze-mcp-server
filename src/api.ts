@@ -297,6 +297,79 @@ export async function setDeviceColorTemp(
   await setDeviceProperty(deviceMac, deviceModel, PropertyId.COLOR_TEMP, value.toString());
 }
 
+// Run action list (for mesh devices like color bulbs)
+export async function runActionList(
+  actions: Array<{
+    instanceId: string;
+    providerKey: string;
+    actionKey: string;
+    actionParams?: Record<string, unknown>;
+  }>
+): Promise<void> {
+  const accessToken = await ensureValidToken();
+
+  const actionList = actions.map((action) => ({
+    instance_id: action.instanceId,
+    provider_key: action.providerKey,
+    action_key: action.actionKey,
+    action_params: action.actionParams || {},
+  }));
+
+  const payload = {
+    ...createBasePayload(accessToken),
+    action_list: actionList,
+  };
+
+  const response = await axios.post<WyzeApiResponse<unknown>>(
+    `${API_BASE_URL}/app/v2/auto/run_action_list`,
+    payload,
+    {
+      headers: { "Content-Type": "application/json" },
+      timeout: 30000,
+    }
+  );
+
+  if (response.data.code !== "1" && response.data.code !== 1) {
+    throw new Error(`Failed to run action list: ${response.data.msg}`);
+  }
+}
+
+// Helper: Set color on mesh bulbs (hex RGB like "ff0000")
+export async function setDeviceColor(
+  deviceMac: string,
+  deviceModel: string,
+  color: string
+): Promise<void> {
+  // Normalize color: remove # prefix if present, ensure lowercase
+  const normalizedColor = color.replace(/^#/, "").toLowerCase();
+
+  // Validate hex color format
+  if (!/^[0-9a-f]{6}$/.test(normalizedColor)) {
+    throw new Error(`Invalid color format: "${color}". Use 6-character hex RGB (e.g., "ff0000" for red)`);
+  }
+
+  await runActionList([
+    {
+      instanceId: deviceMac,
+      providerKey: deviceModel,
+      actionKey: "set_mesh_property",
+      actionParams: {
+        list: [
+          {
+            mac: deviceMac,
+            plist: [
+              {
+                pid: PropertyId.COLOR,
+                pvalue: normalizedColor,
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ]);
+}
+
 // Find device by MAC or nickname
 export async function findDevice(
   identifier: string

@@ -40,11 +40,20 @@ export const PropertyId = {
   AVAILABLE: "P5",
   BRIGHTNESS: "P1501",
   COLOR_TEMP: "P1502",
+  COLOR: "P1507",
+  CONTROL_MODE: "P1508",
   CAMERA_SIREN: "P1049",
   FLOOD_LIGHT: "P1056",
   MOTION_DETECTION: "P1001",
   MOTION_RECORDING: "P1047",
   SOUND_NOTIFICATION: "P1048",
+} as const;
+
+// Light control modes (for P1508)
+export const LightControlMode = {
+  COLOR: "1",
+  TEMPERATURE: "2",
+  FRAGMENTED: "3",
 } as const;
 
 // Property values
